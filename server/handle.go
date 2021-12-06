@@ -18,6 +18,8 @@ func RegisterHandle() {
 
 	// 主页路由
 	http.HandleFunc("/", homeHandleFunc)
+	// 用户列表路由
+	http.HandleFunc("/user_list", userListHandleFunc)
 	// websocket路由
 	http.HandleFunc("/ws", WebSocketHandleFunc)
 }

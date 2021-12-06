@@ -15,13 +15,23 @@ import (
 
 // WebSocketHandleFunc websocket路由处理
 func WebSocketHandleFunc(w http.ResponseWriter, req *http.Request) {
-	conn, err := websocket.Accept(w, req, nil)
+	// 如果 Origin 域与主机不同，Accept 将拒绝握手，除非设置了 InsecureSkipVerify 选项（通过第三个参数 AcceptOptions 设置）。
+	// 换句话说，默认情况下，它不允许跨源请求。如果发生错误，Accept 将始终写入适当的响应
+	conn, err := websocket.Accept(w, req, &websocket.AcceptOptions{InsecureSkipVerify: true})
 	if err != nil {
 		log.Println(err)
 	}
 
 	// 1、构建新用户
 	nickname := req.FormValue("nickname")
+	token := req.FormValue("token")
+	// 校验昵称长度 2 ~ 20
+	if l := len(nickname); l < 2 || l > 20 {
+		log.Println("nickname illegal:", nickname)
+		_ = wsjson.Write(req.Context(), conn, logic.NewErrorMessage("非法昵称，昵称长度：2-20"))
+		_ = conn.Close(websocket.StatusUnsupportedData, "nickname illegal")
+		return
+	}
 	// 判断能否加入
 	if !logic.Broadcaster.CanEnterRoom(nickname) {
 		log.Println("该昵称已存在")
@@ -29,7 +39,7 @@ func WebSocketHandleFunc(w http.ResponseWriter, req *http.Request) {
 		_ = conn.Close(websocket.StatusUnsupportedData, "nickname exists")
 		return
 	}
-	user := logic.NewUser(conn, nickname, req.RemoteAddr)
+	user := logic.NewUser(conn, token, nickname, req.RemoteAddr)
 
 	// 2、开启发送消息的goroutine
 	go user.SendMessage(req.Context())

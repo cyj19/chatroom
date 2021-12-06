@@ -1,0 +1,13 @@
+# 敏感词
+sensitive:
+  - 傻逼
+  - 白痴
+
+
+# 广播器消息队列长度
+message-queue-len: 1024
+
+token-secret: chatroom
+
+# 离线消息存储数量
+offline-num: 10

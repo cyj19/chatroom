@@ -23,6 +23,7 @@ var (
 func Init() {
 	once.Do(func() {
 		interRootDir()
+		initConfig()
 	})
 }
 

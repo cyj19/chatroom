@@ -8,6 +8,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/cyj19/chatroom/global"
 	"github.com/cyj19/chatroom/server"
 	"log"
 	"net/http"
@@ -25,6 +26,10 @@ var (
     ChatRoom，start on：%s
 `
 )
+
+func init() {
+	global.Init()
+}
 
 func main() {
 	fmt.Printf(banner+"\n", addr)
