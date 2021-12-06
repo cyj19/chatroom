@@ -5,8 +5,6 @@
 
 package logic
 
-import "log"
-
 // 广播器
 type broadcaster struct {
 	users                 map[string]*User // 在线用户
@@ -42,7 +40,6 @@ func (b *broadcaster) Start() {
 		case msg := <-b.messageChannel:
 
 			for _, user := range b.users {
-				log.Printf("user: +%v \n", user)
 				if user.UID == msg.User.UID {
 					continue
 				}

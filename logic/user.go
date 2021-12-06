@@ -20,11 +20,11 @@ import (
 var globalID uint32
 
 type User struct {
-	UID            int             `json:"uid"`            // 用户id
-	Nickname       string          `json:"nickname"`       // 用户昵称
-	EnterAt        time.Time       `json:"enterAt"`        // 加入时间
-	Addr           string          `json:"addr"`           // IP地址
-	MessageChannel chan *Message   `json:"messageChannel"` // 消息通道
+	UID            int             `json:"uid"`      // 用户id
+	Nickname       string          `json:"nickname"` // 用户昵称
+	EnterAt        time.Time       `json:"enterAt"`  // 加入时间
+	Addr           string          `json:"addr"`     // IP地址
+	MessageChannel chan *Message   `json:"-"`        // 消息通道  ps:chan无法转为json输出
 	conn           *websocket.Conn // websocket连接
 }
 
@@ -52,8 +52,10 @@ func (u *User) CloseMessageChannel() {
 // SendMessage 给客户端发送消息
 func (u *User) SendMessage(ctx context.Context) {
 	for msg := range u.MessageChannel {
-		log.Println("给客户端发送消息: ", msg)
-		_ = wsjson.Write(ctx, u.conn, msg)
+		err := wsjson.Write(ctx, u.conn, msg)
+		if err != nil {
+			log.Println("server write error: ", err)
+		}
 	}
 }
 
