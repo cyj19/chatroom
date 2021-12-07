@@ -8,26 +8,40 @@
 package global
 
 import (
+	"flag"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
 
 var (
+	Addr            string
 	SensitiveWords  []string
 	MessageQueueLen = 1024
 	TokenSecret     string
 )
 
 func initConfig() {
+	// 增加命令行参数
+	var configPath string
+	flag.StringVar(&configPath, "config", "", "配置文件所在目录")
+	flag.Parse()
+
 	viper.SetConfigName("chatroom")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(RootDir + "/config")
+
+	if configPath == "" {
+		// 默认路径
+		configPath = RootDir + "/config"
+	}
+
+	viper.AddConfigPath(configPath)
 
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("Fatal error config file: %w \n", err))
 	}
 
+	Addr = viper.GetString("addr")
 	SensitiveWords = viper.GetStringSlice("sensitive")
 	MessageQueueLen = viper.GetInt("message-queue-len")
 	TokenSecret = viper.GetString("token-secret")

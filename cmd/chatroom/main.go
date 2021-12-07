@@ -14,9 +14,7 @@ import (
 	"net/http"
 )
 
-var (
-	addr   = ":8888"
-	banner = `
+var banner = `
     ____              _____
    |     |    |   /\     |
    |     |____|  /  \    | 
@@ -25,15 +23,14 @@ var (
 
     ChatRoom，start on：%s
 `
-)
 
 func init() {
 	global.Init()
 }
 
 func main() {
-	fmt.Printf(banner+"\n", addr)
+	fmt.Printf(banner+"\n", global.Addr)
 	server.RegisterHandle()
 
-	log.Fatal(http.ListenAndServe(addr, nil))
+	log.Fatal(http.ListenAndServe(global.Addr, nil))
 }
