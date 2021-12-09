@@ -11,10 +11,6 @@ import (
 	"sync"
 )
 
-func init() {
-	Init()
-}
-
 var (
 	RootDir string
 	once    = new(sync.Once)
