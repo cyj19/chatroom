@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"testing"
 )
 
 var (
@@ -25,6 +26,7 @@ func initConfig() {
 	// 增加命令行参数
 	var configPath string
 	flag.StringVar(&configPath, "config", "", "配置文件所在目录")
+	testing.Init()
 	flag.Parse()
 
 	viper.SetConfigName("chatroom")

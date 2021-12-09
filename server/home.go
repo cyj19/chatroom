@@ -35,7 +35,13 @@ func userListHandleFunc(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	users := logic.Broadcaster.GetUserList()
-	b, err := json.Marshal(users)
+	results := make([]*global.UserResponse, 0, len(users))
+	userResponse := &global.UserResponse{}
+	for _, user := range users {
+		userResponse = global.ProcessSensitiveData(userResponse, user).(*global.UserResponse)
+		results = append(results, userResponse)
+	}
+	b, err := json.Marshal(results)
 
 	if err != nil {
 		log.Println("json.Marshal error:", err)
