@@ -23,3 +23,16 @@ func TestProcessSensitiveData(t *testing.T) {
 	}
 	log.Println(global.ProcessSensitiveData(dst, src))
 }
+
+func TestStruct2Struct(t *testing.T) {
+	dst := &global.UserResponse{}
+	src := &User{
+		UID:      1,
+		Nickname: "user1",
+		EnterAt:  time.Now(),
+		Addr:     "127.0.0.1:7777",
+		Token:    "zsdfvffdgrefgdfxghfdgh",
+	}
+	global.Struct2Struct(src, dst)
+	log.Println(dst)
+}

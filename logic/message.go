@@ -51,8 +51,11 @@ func NewWelcomeMessage(user *User) *Message {
 }
 
 func NewUserEnterMessage(user *User) *Message {
+	// token不传递给其他用户
+	u := *user
+	u.Token = ""
 	return &Message{
-		User:    user,
+		User:    &u,
 		Type:    MsgTypeUserEnter,
 		Content: user.Nickname + "加入了聊天室",
 		MsgTime: time.Now(),

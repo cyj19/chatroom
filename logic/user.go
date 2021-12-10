@@ -53,7 +53,7 @@ func NewUser(conn *websocket.Conn, token, nickname, addr string) *User {
 		conn:           conn,
 	}
 
-	if user.Token != "" {
+	if user.Token != "" && user.Token != "undefined" {
 		// 解析token，获取uid
 		uid, err := parseTokenAndValidate(user.Token, user.Nickname)
 		if err == nil {
