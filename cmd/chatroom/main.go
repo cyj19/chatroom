@@ -12,6 +12,7 @@ import (
 	"github.com/cyj19/chatroom/server"
 	"log"
 	"net/http"
+	_ "net/http/pprof"
 )
 
 var banner = `

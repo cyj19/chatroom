@@ -16,6 +16,10 @@ var (
 	once    = new(sync.Once)
 )
 
+func init() {
+	Init()
+}
+
 func Init() {
 	once.Do(func() {
 		interRootDir()
